@@ -53,5 +53,7 @@ class InfoDaemon(Daemon):
         address = self.config['listen']['address'] if 'address' in self.config['listen'] else '0.0.0.0'
         port = self.config['listen']['port']
 
+        SocketServer.TCPServer.allow_reuse_address = True
+
         httpd = SocketServer.TCPServer((address, port), InfoHTTPHandler)
         httpd.serve_forever()
