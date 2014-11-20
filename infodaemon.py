@@ -13,6 +13,8 @@ providers = []
 
 class InfoHTTPHandler(HTTPHandler):
     def do_GET(self):
+        print("[%s]:[%s]:[%s]" % (self.date_time_string(), self.client_address[0], self.requestline))
+
         data = dict()
 
         for provider in providers:
@@ -20,8 +22,8 @@ class InfoHTTPHandler(HTTPHandler):
 
         self.set_content(json.dumps(data))
 
-class InfoDaemon(Daemon):
-    def __init__(self, pid_file, config_file, log_file = '/dev/null'):
+class InfoServer(object):
+    def __init__(self, config_file):
 
         self.config = dict()
 
@@ -40,12 +42,8 @@ class InfoDaemon(Daemon):
             print("'port' value not found in the listen node")
             self.config = None
 
-        super(InfoDaemon, self).__init__(pid_file, '/dev/null', log_file, log_file)
 
-    def run(self):
-
-        if self.config is None:
-            return
+    def serve(self):
 
         providers.append(UptimeProvider())
         providers.append(LoadProvider())
@@ -57,3 +55,21 @@ class InfoDaemon(Daemon):
 
         httpd = SocketServer.TCPServer((address, port), InfoHTTPHandler)
         httpd.serve_forever()
+
+
+class InfoDaemon(Daemon):
+    def __init__(self, pid_file, config_file, log_file = '/dev/null'):
+
+        self.server = InfoServer(config_file)
+
+        if self.server.config is None:
+            return
+
+        super(InfoDaemon, self).__init__(pid_file, '/dev/null', log_file, log_file)
+
+    def run(self):
+
+        if self.server.config is None:
+            return
+
+        self.server.serve()
