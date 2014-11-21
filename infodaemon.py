@@ -1,7 +1,8 @@
 
 import time
 import json
-import SocketServer
+import SimpleHTTPServer
+import BaseHTTPServer
 
 from daemon import Daemon
 from httphandler import HTTPHandler
@@ -11,16 +12,34 @@ from loadprovider import LoadProvider
 
 providers = []
 
-class InfoHTTPHandler(HTTPHandler):
+class AdvancedHTTPServer(BaseHTTPServer.HTTPServer):
+
+    def __init__(self, listen, handler, request_timeout = 0):
+        BaseHTTPServer.HTTPServer.__init__(self, listen, handler)
+        self.request_timeout = request_timeout
+
+    def set_request_timeout(self, value):
+        self.request_timeout = value
+
+    def finish_request(self, request, client_address):
+        request.settimeout(self.request_timeout)
+        # "super" can not be used because BaseServer is not created from object
+        BaseHTTPServer.HTTPServer.finish_request(self, request, client_address)
+
+class InfoHTTPHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
-        print("[%s]:[%s]:[%s]" % (self.date_time_string(), self.client_address[0], self.requestline))
 
         data = dict()
 
         for provider in providers:
             data.update(provider.fetch())
 
-        self.set_content(json.dumps(data))
+        content = json.dumps(data)
+
+        self.send_response(200)
+        self.send_header("Content-Length", str(len(content)))
+        self.end_headers()
+        self.wfile.write(content)
 
 class InfoServer(object):
     def __init__(self, config_file):
@@ -51,11 +70,8 @@ class InfoServer(object):
         address = self.config['listen']['address'] if 'address' in self.config['listen'] else '0.0.0.0'
         port = self.config['listen']['port']
 
-        SocketServer.TCPServer.allow_reuse_address = True
-
-        httpd = SocketServer.TCPServer((address, port), InfoHTTPHandler)
+        httpd = AdvancedHTTPServer((address, port), InfoHTTPHandler, 10)
         httpd.serve_forever()
-
 
 class InfoDaemon(Daemon):
     def __init__(self, pid_file, config_file, log_file = '/dev/null'):
