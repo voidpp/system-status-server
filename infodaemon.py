@@ -10,6 +10,7 @@ from httphandler import HTTPHandler
 from uptimeprovider import UptimeProvider
 from loadprovider import LoadProvider
 from cpuprovider import CPUProvider
+from memoryprovider import MemoryProvider
 
 providers = []
 
@@ -68,6 +69,7 @@ class InfoServer(object):
         providers.append(UptimeProvider())
         providers.append(LoadProvider())
         providers.append(CPUProvider())
+        providers.append(MemoryProvider())
 
         address = self.config['listen']['address'] if 'address' in self.config['listen'] else '0.0.0.0'
         port = self.config['listen']['port']
