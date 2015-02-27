@@ -100,7 +100,7 @@ class Daemon(object):
         # Check for a pidfile to see if the daemon already runs
         pid = self.get_pid()
 
-        if pid:
+        if self.is_running():
             message = "pidfile %s already exist. Daemon already running?\n"
             sys.stderr.write(message % self.pidfile)
             sys.exit(1)

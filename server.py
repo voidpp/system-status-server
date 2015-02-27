@@ -5,6 +5,8 @@ import os
 
 from infodaemon import InfoDaemon, InfoServer
 
+root_path = os.path.dirname(os.path.realpath(__file__))
+
 parser = argparse.ArgumentParser()
 start_group = parser.add_mutually_exclusive_group(required = True)
 start_group.add_argument("command", help = "command", choices = ['start', 'stop', 'restart', 'status'], nargs='?')
@@ -13,16 +15,16 @@ parser.add_argument("--config", help = "config file", type = str, default = 'con
 
 args = parser.parse_args()
 
+config = os.path.join(root_path, args.config)
+
 if args.console:
 
-    server = InfoServer(args.config)
+    server = InfoServer(config)
 
     server.serve()
 
 else:
-    curr = os.getcwd()
-
-    daemon = InfoDaemon(os.path.join(curr, 'server.pid'), args.config, os.path.join(curr, 'server.log'))
+    daemon = InfoDaemon(os.path.join(root_path, 'server.pid'), config, os.path.join(root_path, 'server.log'))
 
     command = getattr(daemon, args.command)
 
