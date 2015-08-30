@@ -4,13 +4,13 @@ import json
 import SimpleHTTPServer
 import BaseHTTPServer
 
-from daemon import Daemon
-from httphandler import HTTPHandler
+from system_status_server.daemon import Daemon
+from system_status_server.httphandler import HTTPHandler
 
-from uptimeprovider import UptimeProvider
-from loadprovider import LoadProvider
-from cpuprovider import CPUProvider
-from memoryprovider import MemoryProvider
+from system_status_server.uptimeprovider import UptimeProvider
+from system_status_server.loadprovider import LoadProvider
+from system_status_server.cpuprovider import CPUProvider
+from system_status_server.memoryprovider import MemoryProvider
 
 providers = []
 
@@ -44,16 +44,9 @@ class InfoHTTPHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.wfile.write(content)
 
 class InfoServer(object):
-    def __init__(self, config_file):
+    def __init__(self, config):
 
-        self.config = dict()
-
-        try:
-            with open(config_file) as file:
-                self.config = json.loads(file.read())
-        except ValueError as e:
-            print(e)
-            return
+        self.config = config
 
         if 'listen' not in self.config:
             print("'listen' node not found in the config")
@@ -78,9 +71,9 @@ class InfoServer(object):
         httpd.serve_forever()
 
 class InfoDaemon(Daemon):
-    def __init__(self, pid_file, config_file, log_file = '/dev/null'):
+    def __init__(self, pid_file, config, log_file = '/dev/null'):
 
-        self.server = InfoServer(config_file)
+        self.server = InfoServer(config)
 
         if self.server.config is None:
             return

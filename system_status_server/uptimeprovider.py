@@ -2,7 +2,7 @@
 import psutil
 import time
 
-from dataproviderbase import DataProviderBase
+from system_status_server.dataproviderbase import DataProviderBase
 
 class UptimeProvider(DataProviderBase):
 

@@ -11,10 +11,26 @@ Available nodes:
 - CPU (number of cores)
 - Memory usage
 
-Dependencies:
+Installation:
 -
+`pip install system-status-server`
 
-- psutil
+Usage:
+-
+Help: `system-status-server -h`
+
+Typical start: `system-status-server start --port 4242`
+
+Example config:
+-
+```json
+{
+	"listen": {
+		"address" : "0.0.0.0",
+		"port" : 35280
+	}
+}
+```
 
 Typical out:
 -

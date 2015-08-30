@@ -1,7 +1,7 @@
 
 import psutil
 
-from dataproviderbase import DataProviderBase
+from system_status_server.dataproviderbase import DataProviderBase
 
 class CPUProvider(DataProviderBase):
 
@@ -9,6 +9,6 @@ class CPUProvider(DataProviderBase):
 
         return dict(
             cpu = dict(
-                cores = psutil.NUM_CPUS
+                cores = psutil.cpu_count()
             )
         )
