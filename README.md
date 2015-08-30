@@ -21,6 +21,8 @@ Help: `system-status-server -h`
 
 Typical start: `system-status-server start --port 4242`
 
+Optional config file `/etc/system-status-server.json` (the path is hard coded)
+
 Example config:
 -
 ```json
