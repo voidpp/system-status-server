@@ -1,7 +1,7 @@
 
 import psutil
 
-from system_status_server.dataproviderbase import DataProviderBase
+from .dataproviderbase import DataProviderBase
 
 class MemoryProvider(DataProviderBase):
 

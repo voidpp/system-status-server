@@ -1,7 +1,7 @@
 
 import os
 
-from system_status_server.dataproviderbase import DataProviderBase
+from .dataproviderbase import DataProviderBase
 
 class LoadProvider(DataProviderBase):
 

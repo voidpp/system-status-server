@@ -1,44 +1,64 @@
-About
--
+[![Build Status](https://travis-ci.org/voidpp/hdd-stat.svg?branch=master)](https://travis-ci.org/voidpp/system-status-server)
+[![Coverage Status](https://coveralls.io/repos/github/voidpp/hdd-stat/badge.svg?branch=master)](https://coveralls.io/github/voidpp/system-status-server?branch=master)
 
-This is a very lightweight stuff to get some system status info in JSON.
+About
+--
+
+Microservice to get some system status info in JSON.
 
 Available nodes:
--
+--
 
 - Uptime
 - Load
 - CPU (number of cores)
 - Memory usage
+- HDD
 
 Installation:
--
+--
 `pip install system-status-server`
 
-Usage:
--
-Help: `system-status-server -h`
-
-Typical start: `system-status-server start --port 4242`
-
-Optional config file `/etc/system-status-server.json` (the path is hard coded)
-
-Example config:
--
-```json
-{
-	"listen": {
-		"address" : "0.0.0.0",
-		"port" : 35280
-	}
-}
+Usage
+--
+CLI for hdd stat:
+```bash
+hdd-stat
 ```
 
-Typical out:
--
+uWSGI example config:
+```ini
+[uwsgi]
+processes = 2
+module = system_status_server.app:app
+http-socket = :35280
+```
+
+Typical output:
+--
 ```json
 {
 	"load": [0.29, 0.33, 0.27],
+	"hdd": [
+		{
+			"device": "/dev/mmcblk0p2",
+			"free": 946810880,
+			"label": "trusty",
+			"mount": "/",
+			"percent": 83.0,
+			"total": 7425466368,
+			"used": 6165794816
+		},
+		{
+			"device": "/dev/mmcblk0p1",
+			"free": 122949632,
+			"label": "BOOT",
+			"mount": "/boot",
+			"percent": 8.6,
+			"total": 134582272,
+			"used": 11632640
+		}
+	],
 	"uptime": 3403979,
 	"cpu": {
 		"cores": 8
