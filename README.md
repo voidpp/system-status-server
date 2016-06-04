@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/voidpp/hdd-stat.svg?branch=master)](https://travis-ci.org/voidpp/system-status-server)
-[![Coverage Status](https://coveralls.io/repos/github/voidpp/hdd-stat/badge.svg?branch=master)](https://coveralls.io/github/voidpp/system-status-server?branch=master)
+[![Build Status](https://travis-ci.org/voidpp/system-status-server.svg?branch=master)](https://travis-ci.org/voidpp/system-status-server)
+[![Coverage Status](https://coveralls.io/repos/github/voidpp/system-status-server/badge.svg?branch=master)](https://coveralls.io/github/voidpp/system-status-server?branch=master)
 
 About
 --

@@ -2,6 +2,6 @@ language: python
 python:
     - "3.4"
 install: "pip install -r tests/requirements.txt"
-script: nosetests --with-coverage --cover-package=hdd_stat
+script: nosetests --with-coverage --cover-package=system-status-server
 after_success:
   coveralls
