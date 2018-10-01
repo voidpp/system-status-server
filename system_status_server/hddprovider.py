@@ -22,7 +22,10 @@ class HDDProvider(DataProviderBase):
         )
 
     def get_labels(self):
-        mounts = subprocess.check_output(['mount','-l']).decode('utf8')
+        try:
+            mounts = subprocess.check_output(['mount','-l']).decode('utf8')
+        except subprocess.CalledProcessError:
+            return {}
         disks = {}
         for line in mounts.split('\n'):
             res = self.label_pattern.match(line)
@@ -37,14 +40,11 @@ class HDDProvider(DataProviderBase):
         data = []
 
         for part in partitions:
-            if part.device not in labels:
-                continue
-
             usage = psutil.disk_usage(part.mountpoint)
 
             data.append(partition(
                 part.device,
-                labels[part.device],
+                labels.get(part.device, ''),
                 part.mountpoint,
                 usage.used,
                 usage.total,

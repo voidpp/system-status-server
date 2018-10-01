@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "system-status-server",
-    version = '2.0.0',
+    version = '2.0.1',
     description = "This is a very lightweight stuff to get some system status info in JSON.",
     author = 'Lajos Santa',
     author_email = 'santa.lajos@coldline.hu',
