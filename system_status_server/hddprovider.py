@@ -11,7 +11,7 @@ partition = namedtuple('partition', ['device', 'label', 'mount', 'used', 'total'
 class HDDProvider(DataProviderBase):
 
     def __init__(self):
-        self.label_pattern = re.compile('(\/dev\/[a-z0-9]{3,}) on .+ \[(.+)\]')
+        self.label_pattern = re.compile(r'(\/dev\/[a-z0-9A-Z\/]{3,}) on .+ \[(.+)\]')
 
     def fetch(self):
 
